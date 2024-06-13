@@ -1,0 +1,3 @@
+add_subdirectory(demo)
+add_subdirectory(observerListThreadSafe)
+add_subdirectory(simpleStackTrace)

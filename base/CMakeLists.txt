@@ -1,0 +1,1340 @@
+include(ChromiumBuildFlagHeader)
+include(ChromiumBuildDate)
+include(ChromiumBuildConfig)
+include(ChromiumJniGenerator)
+include(ChromiumSource)
+
+if (NOT IS_WIN AND NOT IS_IOS)
+    set(USE_LIBEVENT ON)
+else()
+    set(USE_LIBEVENT OFF)
+endif()
+
+set(USE_PARTITION_ALLOC ON)
+
+chromium_source_append(
+    OUT_VAR
+        BASE_SRCS
+    FILES
+		"at_exit.cc"
+		"barrier_closure.cc"
+		"base64.cc"
+		"base64url.cc"
+		"base_paths.cc"
+		"base_paths_posix.cc"
+		"base_switches.cc"
+		"big_endian.cc"
+		"build_time.cc"
+		"callback_helpers.cc"
+		"callback_internal.cc"
+		"command_line.cc"
+		"cpu.cc"
+        "debug/activity_tracker.cc"
+        "debug/activity_tracker.h"
+        "debug/alias.cc"
+        "debug/alias.h"
+        "debug/crash_logging.cc"
+        "debug/crash_logging.h"
+        "debug/debugger.cc"
+        "debug/debugger.h"
+        "debug/debugger_win.cc"
+        "debug/dump_without_crashing.cc"
+        "debug/dump_without_crashing.h"
+        "debug/leak_annotations.h"
+        "debug/leak_tracker.h"
+        "debug/proc_maps_linux.cc"
+        "debug/proc_maps_linux.h"
+        "debug/profiler.cc"
+        "debug/profiler.h"
+        "debug/stack_trace.cc"
+        "debug/stack_trace.h"
+        "debug/stack_trace_android.cc"
+        "debug/stack_trace_win.cc"
+        "debug/task_annotator.cc"
+        "debug/task_annotator.h"
+        "debug/thread_heap_usage_tracker.cc"
+        "debug/thread_heap_usage_tracker.h"
+		"environment.cc"
+		"feature_list.cc"
+		"file_version_info.h"
+        "file_version_info_mac.h"
+        "file_version_info_mac.mm"
+        "file_version_info_win.cc"
+        "file_version_info_win.h"
+        "files/dir_reader_fallback.h"
+        "files/dir_reader_linux.h"
+        "files/file.cc"
+        "files/file.h"
+        "files/file_enumerator.cc"
+        "files/file_enumerator.h"
+        "files/file_enumerator_win.cc"
+        "files/file_path.cc"
+        "files/file_path.h"
+        "files/file_path_constants.cc"
+        "files/file_path_watcher.cc"
+        "files/file_path_watcher.h"
+        "files/file_proxy.cc"
+        "files/file_proxy.h"
+        "files/file_tracing.cc"
+        "files/file_tracing.h"
+        "files/file_util.cc"
+        "files/file_util.h"
+        "files/file_util_android.cc"
+        "files/file_util_linux.cc"
+        "files/file_util_mac.mm"
+        "files/file_util_win.cc"
+        "files/file_win.cc"
+        "files/important_file_writer.cc"
+        "files/important_file_writer.h"
+        "files/memory_mapped_file.cc"
+        "files/memory_mapped_file.h"
+        "files/memory_mapped_file_win.cc"
+        "files/platform_file.h"
+        "files/scoped_file.cc"
+        "files/scoped_file.h"
+        "files/scoped_temp_dir.cc"
+        "files/scoped_temp_dir.h"
+		"guid.cc"
+		"hash.cc"
+		"json/json_file_value_serializer.cc"
+		"json/json_parser.cc"
+		"json/json_reader.cc"
+		"json/json_string_value_serializer.cc"
+		"json/json_value_converter.cc"
+		"json/json_writer.cc"
+		"json/string_escape.cc"
+		"lazy_instance_helpers.cc"
+		"location.cc"
+		"logging.cc"
+		"md5.cc"
+		"memory/aligned_memory.cc"
+		"memory/platform_shared_memory_region.cc"
+		"memory/platform_shared_memory_region_posix.cc"
+		"memory/read_only_shared_memory_region.cc"
+		"memory/ref_counted.cc"
+		"memory/ref_counted_memory.cc"
+		"memory/shared_memory_handle.cc"
+		"memory/shared_memory_handle_posix.cc"
+		"memory/shared_memory_helper.cc"
+		"memory/shared_memory_mapping.cc"
+		"memory/shared_memory_posix.cc"
+		"memory/unsafe_shared_memory_region.cc"
+		"memory/weak_ptr.cc"
+		"memory/writable_shared_memory_region.cc"
+		"message_loop/incoming_task_queue.cc"
+		"message_loop/message_loop.cc"
+		"message_loop/message_loop_current.cc"
+		"message_loop/message_loop_task_runner.cc"
+		"message_loop/message_pump.cc"
+        "message_loop/message_pump.h"
+        "message_loop/message_pump_android.cc"
+        "message_loop/message_pump_android.h"
+        "message_loop/message_pump_default.cc"
+        "message_loop/message_pump_default.h"
+        "message_loop/message_pump_for_io.h"
+        "message_loop/message_pump_for_ui.h"
+        "message_loop/message_pump_glib.cc"
+        "message_loop/message_pump_glib.h"
+        "message_loop/message_pump_io_ios.cc"
+        "message_loop/message_pump_io_ios.h"
+        "message_loop/message_pump_mac.h"
+        "message_loop/message_pump_mac.mm"
+        "message_loop/message_pump_win.cc"
+        "message_loop/message_pump_win.h"
+		"message_loop/watchable_io_message_pump_posix.cc"
+		"metrics/bucket_ranges.cc"
+		"metrics/dummy_histogram.cc"
+		"metrics/field_trial.cc"
+		"metrics/field_trial_param_associator.cc"
+		"metrics/field_trial_params.cc"
+		"metrics/histogram.cc"
+		"metrics/histogram_base.cc"
+		"metrics/histogram_functions.cc"
+		"metrics/histogram_samples.cc"
+		"metrics/histogram_snapshot_manager.cc"
+		"metrics/metrics_hashes.cc"
+		"metrics/persistent_histogram_allocator.cc"
+		"metrics/persistent_memory_allocator.cc"
+		"metrics/persistent_sample_map.cc"
+		"metrics/sample_map.cc"
+		"metrics/sample_vector.cc"
+		"metrics/sparse_histogram.cc"
+		"metrics/statistics_recorder.cc"
+		"observer_list_threadsafe.cc"
+		"path_service.cc"
+		"pending_task.cc"
+		"pickle.cc"
+		"posix/file_descriptor_shuffle.cc"
+		"posix/global_descriptors.cc"
+		"posix/safe_strerror.cc"
+		"posix/unix_domain_socket.cc"
+		"process/environment_internal.cc"
+        "process/environment_internal.h"
+        "process/kill.cc"
+        "process/kill.h"
+        "process/kill_mac.cc"
+        "process/kill_win.cc"
+        "process/launch.cc"
+        "process/launch.h"
+        "process/launch_ios.cc"
+        "process/launch_mac.cc"
+        "process/launch_win.cc"
+        "process/memory.cc"
+        "process/memory.h"
+        "process/memory_linux.cc"
+        "process/memory_mac.mm"
+        "process/memory_win.cc"
+        "process/process.h"
+        "process/process_handle.cc"
+        "process/process_handle.h"
+        "process/process_handle_linux.cc"
+        "process/process_handle_mac.cc"
+        "process/process_handle_win.cc"
+        "process/process_info.h"
+        "process/process_info_linux.cc"
+        "process/process_info_mac.cc"
+        "process/process_info_win.cc"
+        "process/process_iterator.cc"
+        "process/process_iterator.h"
+        "process/process_iterator_linux.cc"
+        "process/process_iterator_mac.cc"
+        "process/process_iterator_win.cc"
+        "process/process_linux.cc"
+        "process/process_mac.cc"
+        "process/process_metrics.cc"
+        "process/process_metrics.h"
+		"process/process_metrics_iocounters.h"
+        "process/process_metrics_ios.cc"
+        "process/process_metrics_linux.cc"
+        "process/process_metrics_mac.cc"
+        "process/process_metrics_win.cc"
+        "process/process_win.cc"
+		"rand_util.cc"
+		"rand_util_posix.cc"
+		"run_loop.cc"
+		"sequence_checker_impl.cc"
+		"sequence_token.cc"
+		"sequenced_task_runner.cc"
+		"sha1.cc"
+		"strings/char_traits.h"
+        "strings/latin1_string_conversions.cc"
+        "strings/latin1_string_conversions.h"
+        "strings/nullable_string16.cc"
+        "strings/nullable_string16.h"
+        "strings/pattern.cc"
+        "strings/pattern.h"
+        "strings/safe_sprintf.cc"
+        "strings/safe_sprintf.h"
+        "strings/strcat.cc"
+        "strings/strcat.h"
+        "strings/string16.cc"
+        "strings/string16.h"
+        "strings/string_number_conversions.cc"
+        "strings/string_number_conversions.h"
+        "strings/string_piece.cc"
+        "strings/string_piece.h"
+        "strings/string_piece_forward.h"
+        "strings/string_split.cc"
+        "strings/string_split.h"
+        "strings/string_tokenizer.h"
+        "strings/string_util.cc"
+        "strings/string_util.h"
+        "strings/string_util_constants.cc"
+        "strings/string_util_win.h"
+        "strings/stringize_macros.h"
+        "strings/stringprintf.cc"
+        "strings/stringprintf.h"
+        "strings/sys_string_conversions.h"
+        "strings/sys_string_conversions_mac.mm"
+        "strings/sys_string_conversions_win.cc"
+        "strings/utf_offset_string_conversions.cc"
+        "strings/utf_offset_string_conversions.h"
+        "strings/utf_string_conversion_utils.cc"
+        "strings/utf_string_conversion_utils.h"
+        "strings/utf_string_conversions.cc"
+        "strings/utf_string_conversions.h"
+		"sync_socket_posix.cc"
+		"synchronization/atomic_flag.cc"
+        "synchronization/atomic_flag.h"
+        "synchronization/cancellation_flag.h"
+        "synchronization/condition_variable.h"
+        "synchronization/condition_variable_win.cc"
+        "synchronization/lock.cc"
+        "synchronization/lock.h"
+        "synchronization/lock_impl.h"
+        "synchronization/lock_impl_win.cc"
+        "synchronization/waitable_event.h"
+        "synchronization/waitable_event_mac.cc"
+        "synchronization/waitable_event_watcher.h"
+        "synchronization/waitable_event_win.cc"
+		"sys_info.cc"
+		"sys_info_chromeos.cc"
+		"sys_info_linux.cc"
+		"sys_info_posix.cc"
+		"task/cancelable_task_tracker.cc"
+		"task_runner.cc"		
+		"task_scheduler/can_schedule_sequence_observer.h"
+        "task_scheduler/delayed_task_manager.cc"
+        "task_scheduler/delayed_task_manager.h"
+        "task_scheduler/environment_config.cc"
+        "task_scheduler/environment_config.h"
+        "task_scheduler/initialization_util.cc"
+        "task_scheduler/initialization_util.h"
+		"task_scheduler/lazy_task_runner.cc"
+        "task_scheduler/lazy_task_runner.h"
+		"task_scheduler/post_task.cc"
+        "task_scheduler/post_task.h"
+        "task_scheduler/priority_queue.cc"
+        "task_scheduler/priority_queue.h"
+        "task_scheduler/scheduler_lock.h"
+        "task_scheduler/scheduler_lock_impl.cc"
+        "task_scheduler/scheduler_lock_impl.h"
+        "task_scheduler/scheduler_single_thread_task_runner_manager.cc"
+        "task_scheduler/scheduler_single_thread_task_runner_manager.h"
+        "task_scheduler/scheduler_worker.cc"
+        "task_scheduler/scheduler_worker.h"
+        "task_scheduler/scheduler_worker_observer.h"
+        "task_scheduler/scheduler_worker_params.h"
+        "task_scheduler/scheduler_worker_pool.cc"
+        "task_scheduler/scheduler_worker_pool.h"
+        "task_scheduler/scheduler_worker_pool_impl.cc"
+        "task_scheduler/scheduler_worker_pool_impl.h"
+        "task_scheduler/scheduler_worker_pool_params.cc"
+        "task_scheduler/scheduler_worker_pool_params.h"
+        "task_scheduler/scheduler_worker_stack.cc"
+        "task_scheduler/scheduler_worker_stack.h"
+        "task_scheduler/sequence.cc"
+        "task_scheduler/sequence.h"
+        "task_scheduler/sequence_sort_key.cc"
+        "task_scheduler/sequence_sort_key.h"
+        "task_scheduler/service_thread.cc"
+        "task_scheduler/service_thread.h"
+		"task_scheduler/single_thread_task_runner_thread_mode.h"
+        "task_scheduler/task.cc"
+        "task_scheduler/task.h"
+        "task_scheduler/task_scheduler.cc"
+        "task_scheduler/task_scheduler.h"
+        "task_scheduler/task_scheduler_impl.cc"
+        "task_scheduler/task_scheduler_impl.h"
+        "task_scheduler/task_tracker.cc"
+        "task_scheduler/task_tracker.h"
+		"task_scheduler/task_traits.cc"
+		"task_scheduler/task_traits.h"
+		"task_scheduler/task_traits_details.h"
+		"task_scheduler/test_utils.h"
+        "task_scheduler/tracked_ref.h"
+		"third_party/dynamic_annotations/dynamic_annotations.c"
+		"third_party/icu/icu_utf.cc"
+		"third_party/nspr/prtime.cc"
+		"threading/platform_thread.h"
+        "threading/platform_thread_android.cc"
+        "threading/platform_thread_linux.cc"
+        "threading/platform_thread_mac.mm"
+        "threading/platform_thread_win.cc"
+        "threading/platform_thread_win.h"
+        "threading/post_task_and_reply_impl.cc"
+        "threading/post_task_and_reply_impl.h"
+        "threading/scoped_blocking_call.cc"
+        "threading/scoped_blocking_call.h"
+        "threading/sequence_local_storage_map.cc"
+        "threading/sequence_local_storage_map.h"
+        "threading/sequence_local_storage_slot.cc"
+        "threading/sequence_local_storage_slot.h"
+        "threading/sequenced_task_runner_handle.cc"
+        "threading/sequenced_task_runner_handle.h"
+        "threading/simple_thread.cc"
+        "threading/simple_thread.h"
+        "threading/thread.cc"
+        "threading/thread.h"
+        "threading/thread_checker.h"
+        "threading/thread_checker_impl.cc"
+        "threading/thread_checker_impl.h"
+        "threading/thread_collision_warner.cc"
+        "threading/thread_collision_warner.h"
+        "threading/thread_id_name_manager.cc"
+        "threading/thread_id_name_manager.h"
+        "threading/thread_local.h"
+        "threading/thread_local_storage.cc"
+        "threading/thread_local_storage.h"
+        "threading/thread_local_storage_win.cc"
+        "threading/thread_restrictions.cc"
+        "threading/thread_restrictions.h"
+        "threading/thread_task_runner_handle.cc"
+        "threading/thread_task_runner_handle.h"
+        "threading/watchdog.cc"
+        "threading/watchdog.h"
+		"time/clock.cc"
+		"time/default_clock.cc"
+		"time/default_tick_clock.cc"
+		"time/tick_clock.cc"
+		"time/time.cc"
+		"time/time_conversion_posix.cc"
+		"time/time_exploded_posix.cc"
+		"time/time_now_posix.cc"
+		"time/time_override.cc"
+		"timer/elapsed_timer.cc"
+		"timer/timer.cc"
+		"unguessable_token.cc"
+		"value_iterators.cc"
+		"values.cc"
+		"version.cc"
+		"vlog.cc"
+		"win/async_operation.h"
+        "win/atl.h"
+        "win/com_init_check_hook.cc"
+        "win/com_init_check_hook.h"
+        "win/com_init_util.cc"
+        "win/com_init_util.h"
+        "win/core_winrt_util.cc"
+        "win/core_winrt_util.h"
+        "win/current_module.h"
+        "win/enum_variant.cc"
+        "win/enum_variant.h"
+        "win/event_trace_consumer.h"
+        "win/event_trace_controller.cc"
+        "win/event_trace_controller.h"
+        "win/event_trace_provider.cc"
+        "win/event_trace_provider.h"
+        "win/i18n.cc"
+        "win/i18n.h"
+        "win/iat_patch_function.cc"
+        "win/iat_patch_function.h"
+        "win/iunknown_impl.cc"
+        "win/iunknown_impl.h"
+        "win/message_window.cc"
+        "win/message_window.h"
+        "win/object_watcher.cc"
+        "win/object_watcher.h"
+        "win/patch_util.cc"
+        "win/patch_util.h"
+        "win/process_startup_helper.cc"
+        "win/process_startup_helper.h"
+        "win/propvarutil.h"
+        "win/reference.h"
+        "win/registry.cc"
+        "win/registry.h"
+        "win/resource_util.cc"
+        "win/resource_util.h"
+        "win/scoped_bstr.cc"
+        "win/scoped_bstr.h"
+        "win/scoped_co_mem.h"
+        "win/scoped_com_initializer.cc"
+        "win/scoped_com_initializer.h"
+        "win/scoped_gdi_object.h"
+        "win/scoped_handle.cc"
+        "win/scoped_handle.h"
+        "win/scoped_handle_verifier.cc"
+        "win/scoped_handle_verifier.h"
+        "win/scoped_hdc.h"
+        "win/scoped_hglobal.h"
+        "win/scoped_hstring.cc"
+        "win/scoped_hstring.h"
+        "win/scoped_process_information.cc"
+        "win/scoped_process_information.h"
+        "win/scoped_propvariant.h"
+        "win/scoped_select_object.h"
+        "win/scoped_variant.cc"
+        "win/scoped_variant.h"
+        "win/scoped_windows_thread_environment.h"
+        "win/scoped_winrt_initializer.cc"
+        "win/scoped_winrt_initializer.h"
+        "win/shlwapi.h"
+        "win/sphelper.h"
+        "win/startup_information.cc"
+        "win/startup_information.h"
+        "win/typed_event_handler.h"
+        "win/vector.cc"
+        "win/vector.h"
+        "win/win_client_metrics.h"
+        "win/win_util.cc"
+        "win/win_util.h"
+		"win/wincrypt_shim.h"
+        "win/windows_defines.inc"
+		"win/windows_full.h"
+        "win/windows_types.h"
+        "win/windows_undefines.inc"
+        "win/windows_version.cc"
+        "win/windows_version.h"
+        "win/winrt_storage_util.cc"
+        "win/winrt_storage_util.h"
+        "win/wmi.cc"
+        "win/wmi.h"
+        "win/wrapped_window_proc.cc"
+        "win/wrapped_window_proc.h"   
+)
+
+if (IS_POSIX)
+    chromium_source_append(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "base_paths_posix.h"
+            "debug/debugger_posix.cc"
+            "debug/stack_trace_posix.cc"
+            "file_descriptor_posix.h"
+            "files/dir_reader_posix.h"
+            "files/file_descriptor_watcher_posix.cc"
+            "files/file_descriptor_watcher_posix.h"
+            "files/file_enumerator_posix.cc"
+            "files/file_posix.cc"
+            "files/file_util_posix.cc"
+            "files/memory_mapped_file_posix.cc"
+            "memory/protected_memory_posix.cc"
+            "message_loop/watchable_io_message_pump_posix.cc"
+            "message_loop/watchable_io_message_pump_posix.h"
+            "native_library_posix.cc"
+            "posix/eintr_wrapper.h"
+            "posix/file_descriptor_shuffle.cc"
+            "posix/file_descriptor_shuffle.h"
+            "posix/global_descriptors.cc"
+            "posix/global_descriptors.h"
+            "posix/safe_strerror.cc"
+            "posix/safe_strerror.h"
+            "posix/unix_domain_socket.cc"
+            "posix/unix_domain_socket.h"
+            "process/kill_posix.cc"
+            "process/launch_posix.cc"
+            "process/process_handle_posix.cc"
+            "process/process_metrics_posix.cc"
+            "process/process_posix.cc"
+            "profiler/native_stack_sampler_posix.cc"
+            "rand_util_posix.cc"
+            "sampling_heap_profiler/module_cache_posix.cc"
+            "strings/string_util_posix.h"
+            "strings/sys_string_conversions_posix.cc"
+            "sync_socket_posix.cc"
+            "synchronization/condition_variable_posix.cc"
+            "synchronization/lock_impl_posix.cc"
+            "synchronization/waitable_event_posix.cc"
+            "synchronization/waitable_event_watcher_posix.cc"
+            "sys_info_posix.cc"
+            "task/task_scheduler/task_tracker_posix.cc"
+            "task/task_scheduler/task_tracker_posix.h"
+            "threading/platform_thread_internal_posix.cc"
+            "threading/platform_thread_internal_posix.h"
+            "threading/platform_thread_posix.cc"
+            "threading/thread_local_storage_posix.cc"
+            "timer/hi_res_timer_manager_posix.cc"  
+    )
+endif()
+
+if (NOT IS_NACL)
+    chromium_source_append(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "base_paths.cc"
+            "base_paths.h"
+            "base_paths_android.cc"
+            "base_paths_android.h"
+            "base_paths_mac.h"
+            "base_paths_mac.mm"
+            "base_paths_posix.h"
+            "base_paths_win.cc"
+            "base_paths_win.h"
+            "metrics/persistent_histogram_storage.cc"
+            "metrics/persistent_histogram_storage.h"
+    )
+    if (IS_LINUX)
+        chromium_source_append(
+            OUT_VAR
+                BASE_SRCS
+            FILES    
+                "base_paths_posix.cc"
+                "debug/elf_reader_linux.cc"
+                "debug/elf_reader_linux.h"         
+        )
+    endif()
+endif()
+
+if (USE_ALLOCATOR_SHIM)
+    chromium_source_append(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "allocator/allocator_shim.cc"
+            "allocator/allocator_shim.h"
+            "allocator/allocator_shim_internals.h"
+            "allocator/allocator_shim_override_cpp_symbols.h"
+            "allocator/allocator_shim_override_libc_symbols.h"    
+    )
+    if (IS_WIN)
+        chromium_source_append(
+            OUT_VAR
+                BASE_SRCS
+            FILES    
+                "allocator/allocator_shim_default_dispatch_to_winheap.cc"
+                "allocator/allocator_shim_override_ucrt_symbols_win.h"
+                "allocator/winheap_stubs_win.cc"
+                "allocator/winheap_stubs_win.h"            
+        )
+    elseif(IS_LINUX AND use_allocator STREQUAL "tcmalloc") 
+        chromium_source_append(
+            OUT_VAR
+                BASE_SRCS
+            FILES    
+                "allocator/allocator_shim_default_dispatch_to_tcmalloc.cc"
+                "allocator/allocator_shim_override_glibc_weak_symbols.h"
+        )
+    elseif(IS_LINUX AND use_allocator STREQUAL "none") 
+        chromium_source_append(
+            OUT_VAR
+                BASE_SRCS
+            FILES        
+                "allocator/allocator_shim_default_dispatch_to_glibc.cc"
+        )
+    elseif(IS_ANDROID AND use_allocator STREQUAL "none")
+        chromium_source_append(
+            OUT_VAR
+                BASE_SRCS
+            FILES   
+                "allocator/allocator_shim_default_dispatch_to_linker_wrapped_symbols.cc"
+                "allocator/allocator_shim_override_linker_wrapped_symbols.h"
+        )
+    elseif(IS_MAC)
+        chromium_source_append(
+            OUT_VAR
+                BASE_SRCS
+            FILES   
+                "allocator/allocator_shim_default_dispatch_to_mac_zoned_malloc.cc"
+                "allocator/allocator_shim_default_dispatch_to_mac_zoned_malloc.h"
+                "allocator/allocator_shim_override_mac_symbols.h"    
+        )
+    endif()
+endif()
+
+if (IS_ANDROID)
+    chromium_source_remove(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "debug/stack_trace_posix.cc"            
+    )
+    chromium_source_append(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "memory/platform_shared_memory_region_android.cc"
+            "memory/shared_memory_android.cc"
+            "memory/shared_memory_handle_android.cc"
+            "time/time_android.cc"            
+    )
+    chromium_source_append(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "android/android_hardware_buffer_compat.cc"
+            "android/android_hardware_buffer_compat.h"
+            "android/android_image_reader_abi.h"
+            "android/android_image_reader_compat.cc"
+            "android/android_image_reader_compat.h"
+            "android/animation_frame_time_histogram.cc"
+            "android/apk_assets.cc"
+            "android/apk_assets.h"
+            "android/application_status_listener.cc"
+            "android/application_status_listener.h"
+            "android/base_jni_onload.cc"
+            "android/base_jni_onload.h"
+            "android/build_info.cc"
+            "android/build_info.h"
+            "android/callback_android.cc"
+            "android/callback_android.h"
+            "android/child_process_binding_types.h"
+            "android/child_process_service.cc"
+            "android/command_line_android.cc"
+            "android/content_uri_utils.cc"
+            "android/content_uri_utils.h"
+            "android/cpu_features.cc"
+            "android/early_trace_event_binding.cc"
+            "android/early_trace_event_binding.h"
+            "android/event_log.cc"
+            "android/event_log.h"
+            "android/field_trial_list.cc"
+            "android/important_file_writer_android.cc"
+            "android/java_exception_reporter.cc"
+            "android/java_exception_reporter.h"
+            "android/java_handler_thread.cc"
+            "android/java_handler_thread.h"
+            "android/java_runtime.cc"
+            "android/java_runtime.h"
+            "android/jni_android.cc"
+            "android/jni_android.h"
+            "android/jni_array.cc"
+            "android/jni_array.h"
+            "android/jni_generator/jni_generator_helper.h"
+            "android/jni_int_wrapper.h"
+            "android/jni_registrar.cc"
+            "android/jni_registrar.h"
+            "android/jni_string.cc"
+            "android/jni_string.h"
+            "android/jni_utils.cc"
+            "android/jni_utils.h"
+            "android/jni_weak_ref.cc"
+            "android/jni_weak_ref.h"
+            "android/library_loader/anchor_functions.cc"
+            "android/library_loader/anchor_functions.h"
+            "android/library_loader/library_load_from_apk_status_codes.h"
+            "android/library_loader/library_loader_hooks.cc"
+            "android/library_loader/library_loader_hooks.h"
+            "android/library_loader/library_prefetcher.cc"
+            "android/library_loader/library_prefetcher.h"
+            "android/locale_utils.cc"
+            "android/locale_utils.h"
+            "android/memory_pressure_listener_android.cc"
+            "android/memory_pressure_listener_android.h"
+            "android/path_service_android.cc"
+            "android/path_utils.cc"
+            "android/path_utils.h"
+            "android/record_histogram.cc"
+            "android/record_user_action.cc"
+            "android/scoped_hardware_buffer_handle.cc"
+            "android/scoped_hardware_buffer_handle.h"
+            "android/scoped_java_ref.cc"
+            "android/scoped_java_ref.h"
+            "android/statistics_recorder_android.cc"
+            "android/sys_utils.cc"
+            "android/sys_utils.h"
+            "android/time_utils.cc"
+            "android/timezone_utils.cc"
+            "android/timezone_utils.h"
+            "android/trace_event_binding.cc"
+            "android/unguessable_token_android.cc"
+            "android/unguessable_token_android.h"
+            "memory/platform_shared_memory_region_android.cc"
+            "memory/shared_memory_android.cc"
+            "memory/shared_memory_handle_android.cc"
+            "sys_info_android.cc"
+            "time/time_android.cc"      
+    )
+    chromium_source_append(
+        DISABLE_FILTER
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "debug/elf_reader_linux.cc"
+            "debug/elf_reader_linux.h"
+            "debug/proc_maps_linux.cc"
+            "debug/proc_maps_linux.h"
+            "files/file_path_watcher_linux.cc"
+            "power_monitor/power_monitor_device_source_android.cc"
+            "process/internal_linux.cc"
+            "process/internal_linux.h"
+            "process/memory_linux.cc"
+            "process/process_handle_linux.cc"
+            "process/process_info_linux.cc"
+            "process/process_iterator_linux.cc"
+            "process/process_metrics_linux.cc"
+            "sys_info_linux.cc"
+    )
+    if (can_unwind_with_cfi_table)
+        chromium_source_append(
+            OUT_VAR
+                BASE_SRCS
+            FILES
+                "trace_event/cfi_backtrace_android.cc"
+                "trace_event/cfi_backtrace_android.h"
+        )                   
+    endif()
+endif()
+
+if (NOT IS_NACL)
+    chromium_source_remove(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "os_compat_nacl.cc"
+            "os_compat_nacl.h"
+            "rand_util_nacl.cc"
+    )
+    if(USE_PARTITION_ALLOC) 
+        chromium_source_append(
+            OUT_VAR
+                BASE_SRCS
+            FILES  
+                "allocator/partition_allocator/address_space_randomization.cc"
+                "allocator/partition_allocator/address_space_randomization.h"
+                "allocator/partition_allocator/oom.h"
+				"allocator/partition_allocator/oom_callback.cc"
+                "allocator/partition_allocator/oom_callback.h"
+                "allocator/partition_allocator/page_allocator.cc"
+                "allocator/partition_allocator/page_allocator.h"
+                "allocator/partition_allocator/page_allocator_constants.h"
+				"allocator/partition_allocator/page_allocator_internal.h"
+                "allocator/partition_allocator/partition_alloc.cc"
+                "allocator/partition_allocator/partition_alloc.h"
+				"allocator/partition_allocator/partition_alloc_check.h"
+                "allocator/partition_allocator/partition_alloc_constants.h"
+                "allocator/partition_allocator/partition_bucket.cc"
+                "allocator/partition_allocator/partition_bucket.h"
+                "allocator/partition_allocator/partition_cookie.h"
+                "allocator/partition_allocator/partition_direct_map_extent.h"
+                "allocator/partition_allocator/partition_freelist_entry.h"
+                "allocator/partition_allocator/partition_oom.cc"
+                "allocator/partition_allocator/partition_oom.h"
+                "allocator/partition_allocator/partition_page.cc"
+                "allocator/partition_allocator/partition_page.h"
+                "allocator/partition_allocator/partition_root_base.cc"
+                "allocator/partition_allocator/partition_root_base.h"
+				"allocator/partition_allocator/random.cc"
+                "allocator/partition_allocator/random.h"
+                "allocator/partition_allocator/spin_lock.cc"
+                "allocator/partition_allocator/spin_lock.h"
+        )
+        if (IS_WIN)
+            chromium_source_append(
+                OUT_VAR
+                    BASE_SRCS
+                FILES        
+                    "allocator/partition_allocator/page_allocator_internals_win.h"
+            )
+        elseif(IS_POSIX)
+            chromium_source_append(
+                OUT_VAR
+                    BASE_SRCS
+                FILES        
+                    "allocator/partition_allocator/page_allocator_internals_posix.h"
+            )            
+        endif()
+    endif()
+endif()
+
+if (IS_WIN)
+    chromium_source_append(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "memory/platform_shared_memory_region_win.cc"
+            "memory/shared_memory_handle_win.cc"
+            "memory/shared_memory_win.cc"
+            "power_monitor/power_monitor_device_source_win.cc"
+            "profiler/win32_stack_frame_unwinder.cc"
+            "profiler/win32_stack_frame_unwinder.h"
+            "rand_util_win.cc"
+            "sys_info_win.cc"
+            "time/time_win.cc"
+    )
+    chromium_source_remove(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "file_descriptor_store.cc"
+            "file_descriptor_store.h"
+            "memory/shared_memory_helper.cc"
+            "memory/shared_memory_helper.h"
+            "strings/string16.cc"
+    )
+endif()
+
+if (IS_MAC)
+    chromium_source_remove(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "profiler/native_stack_sampler_posix.cc"
+            "sampling_heap_profiler/module_cache_posix.cc"
+    )
+    chromium_source_append(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "files/file_path_watcher_fsevents.cc"
+            "files/file_path_watcher_fsevents.h"
+            "files/file_path_watcher_kqueue.cc"
+            "files/file_path_watcher_kqueue.h"
+            "mac/scoped_typeref.h"
+            "memory/platform_shared_memory_region_mac.cc"
+            "memory/shared_memory_handle_mac.cc"
+            "memory/shared_memory_mac.cc"
+            "power_monitor/power_monitor_device_source_mac.mm"
+            "sys_info_mac.mm"
+            "time/time_conversion_posix.cc"
+            "time/time_exploded_posix.cc"
+            "time/time_mac.cc"
+    )    
+endif()
+
+if (IS_MAC OR IS_IOS)
+    chromium_source_remove(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "native_library_posix.cc"
+            "strings/sys_string_conversions_posix.cc"
+            "synchronization/waitable_event_posix.cc"
+            "synchronization/waitable_event_watcher_posix.cc"
+            "threading/platform_thread_internal_posix.cc"
+    )
+else()
+    chromium_source_remove(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "files/file_path_watcher_fsevents.cc"
+            "files/file_path_watcher_fsevents.h"
+            "files/file_path_watcher_kqueue.cc"
+            "files/file_path_watcher_kqueue.h"
+    ) 
+endif()
+
+if (IS_LINUX)
+    chromium_source_append(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "nix/mime_util_xdg.cc"
+            "nix/mime_util_xdg.h"
+            "nix/xdg_util.cc"
+            "nix/xdg_util.h"
+            "sys_info_linux.cc"
+    )
+elseif (NOT IS_ANDROID)
+    chromium_source_remove(
+        OUT_VAR
+            BASE_SRCS
+        FILES 
+            "linux_util.cc"
+            "linux_util.h"
+    )
+endif()
+
+if (IS_IOS)
+    chromium_source_remove(
+        OUT_VAR
+            BASE_SRCS
+        FILES 
+            "files/file_path_watcher.cc"
+            "files/file_path_watcher.h"
+            "memory/discardable_shared_memory.cc"
+            "memory/discardable_shared_memory.h"
+            "process/kill.cc"
+            "process/kill.h"
+            "process/kill_posix.cc"
+            "process/launch.cc"
+            "process/launch.h"
+            "process/launch_posix.cc"
+            "process/memory.cc"
+            "process/memory.h"
+            "process/process_iterator.cc"
+            "process/process_iterator.h"
+            "process/process_metrics_posix.cc"
+            "process/process_posix.cc"
+            "sync_socket.h"
+            "sync_socket_posix.cc"
+            "synchronization/waitable_event_watcher.h"
+                    
+    ) 
+    chromium_source_append(
+        DISABLE_FILTER
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "allocator/allocator_interception_mac.h"
+            "allocator/allocator_interception_mac.mm"
+            "allocator/malloc_zone_functions_mac.cc"
+            "allocator/malloc_zone_functions_mac.h"         
+            "base_paths_mac.h"
+            "base_paths_mac.mm"
+            "file_version_info_mac.h"
+            "file_version_info_mac.mm"
+            "files/file_util_mac.mm"
+            "mac/bundle_locations.h"
+            "mac/bundle_locations.mm"
+            "mac/call_with_eh_frame.cc"
+            "mac/call_with_eh_frame.h"
+            "mac/foundation_util.h"
+            "mac/foundation_util.mm"
+            "mac/mac_logging.h"
+            "mac/mac_logging.mm"
+            "mac/mach_logging.cc"
+            "mac/mach_logging.h"
+            "mac/objc_release_properties.h"
+            "mac/objc_release_properties.mm"
+            "mac/scoped_block.h"
+            "mac/scoped_mach_port.cc"
+            "mac/scoped_mach_port.h"
+            "mac/scoped_mach_vm.cc"
+            "mac/scoped_mach_vm.h"
+            "mac/scoped_nsautorelease_pool.h"
+            "mac/scoped_nsautorelease_pool.mm"
+            "mac/scoped_nsobject.h"
+            "mac/scoped_nsobject.mm"
+            "mac/scoped_objc_class_swizzler.h"
+            "mac/scoped_objc_class_swizzler.mm"
+            "mac/scoped_typeref.h"
+            "message_loop/message_pump_mac.h"
+            "message_loop/message_pump_mac.mm"
+            "power_monitor/power_monitor_device_source_ios.mm"
+            "process/memory_stubs.cc"
+            "strings/sys_string_conversions_mac.mm"
+            "synchronization/waitable_event_mac.cc"
+            "sys_info_ios.mm"
+            "threading/platform_thread_mac.mm"
+            "time/time_conversion_posix.cc"
+            "time/time_mac.cc"
+    )           
+endif()
+
+if (USE_LIBEVENT)
+    chromium_source_append(
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "message_loop/message_pump_libevent.cc"
+            "message_loop/message_pump_libevent.h"
+    )  
+    add_subdirectory(third_party/libevent)
+endif()
+
+if (IS_POSIX AND NOT IS_ANDROID AND NOT IS_MAC)
+    chromium_source_append(        
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "memory/platform_shared_memory_region_posix.cc"
+            "memory/shared_memory_handle_posix.cc"
+    )
+endif()
+
+if (IS_POSIX AND NOT IS_MAC AND NOT IS_NACL)
+    chromium_source_append(        
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "memory/shared_memory_posix.cc"
+    )
+endif()
+
+if (IS_POSIX AND NOT IS_MAC AND NOT IS_IOS)
+    chromium_source_append(        
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "time/time_conversion_posix.cc"
+            "time/time_exploded_posix.cc"
+            "time/time_now_posix.cc"
+    )
+endif()
+
+if (IS_POSIX AND NOT IS_MAC AND NOT IS_IOS AND NOT IS_ANDROID) 
+    chromium_source_append(        
+        OUT_VAR
+            BASE_SRCS
+        FILES
+            "power_monitor/power_monitor_device_source_stub.cc"
+    )
+endif()
+
+if (NOT USE_GLIB)
+    chromium_source_remove(
+        OUT_VAR
+            BASE_SRCS
+        FILES 
+            "message_loop/message_pump_glib.cc"
+            "message_loop/message_pump_glib.h"
+    )
+endif()
+
+
+if (IS_ANDROID)
+    file(TO_CMAKE_PATH "$ENV{ANDROID_HOME}/platforms/android-31/android.jar" android_sdk_jar)
+    chromium_generate_jar_jni(
+        NAME
+            android_runtime_jni_headers
+        JAR
+            "${android_sdk_jar}"
+        GEN_DIR
+            "${CMAKE_CURRENT_BINARY_DIR}"            
+        CLASSES
+            "java/lang/Runtime.class"
+    )
+
+    chromium_generate_java_jni(
+        NAME
+            base_jni_headers          
+        GEN_DIR
+            "${CMAKE_CURRENT_BINARY_DIR}"
+        JAVA_SRCS
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/AnimationFrameTimeHistogram.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/ApkAssets.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/ApplicationStatus.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/BuildInfo.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/Callback.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/CommandLine.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/ContentUriUtils.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/CpuFeatures.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/EarlyTraceEvent.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/EventLog.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/FieldTrialList.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/ImportantFileWriterAndroid.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/JNIUtils.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/JavaExceptionReporter.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/JavaHandlerThread.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/LocaleUtils.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/MemoryPressureListener.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/PathService.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/PathUtils.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/PowerMonitor.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/SysUtils.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/ThreadUtils.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/TimeUtils.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/TimezoneUtils.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/TraceEvent.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/UnguessableToken.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/library_loader/LibraryLoader.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/metrics/RecordHistogram.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/metrics/RecordUserAction.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/metrics/StatisticsRecorderAndroid.java"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/java/src/org/chromium/base/process_launcher/ChildProcessService.java"
+    )
+endif()
+
+chromium_build_date(GEN_DIR ${CMAKE_CURRENT_BINARY_DIR})
+chromium_buildflag_header(
+    NAME
+        allocator_buildflags
+    HEADER
+        "buildflags.h"
+    HEADER_DIR
+        "allocator"
+    FLAGS
+      "USE_ALLOCATOR_SHIM=0"
+      "USE_NEW_TCMALLOC=0"
+)
+
+
+chromium_buildflag_header(
+    NAME
+        cfi_buildflags
+    HEADER
+        "cfi_buildflags.h"  
+    HEADER_DIR 
+        "base"
+    FLAGS 
+      "CFI_CAST_CHECK=0"
+      "CFI_ICALL_CHECK=0"
+      "CFI_ENFORCEMENT_TRAP=0"
+      "CFI_ENFORCEMENT_DIAGNOSTIC=0"
+)
+
+chromium_buildflag_header(
+    NAME
+        debugging_buildflags
+    HEADER
+        "debugging_buildflags.h"
+    HEADER_DIR
+        "debug"
+    FLAGS
+        "ENABLE_LOCATION_SOURCE=0"
+        "ENABLE_PROFILING=0"
+        "CAN_UNWIND_WITH_FRAME_POINTERS=0"
+        "UNSAFE_DEVELOPER_BUILD=0"
+        "CAN_UNWIND_WITH_CFI_TABLE=0"
+        "ENABLE_GDBINIT_WARNING=0"
+)
+
+chromium_buildflag_header(
+    NAME
+        protected_memory_buildflags
+    HEADER
+        "protected_memory_buildflags.h"
+    HEADER_DIR 
+        "memory"
+    FLAGS
+        "USE_LLD=0"
+)
+
+chromium_buildflag_header(
+    NAME
+        synchronization_buildflags
+    HEADER
+        "synchronization_buildflags.h"
+    HEADER_DIR
+        "synchronization"  
+    FLAGS
+        "ENABLE_MUTEX_PRIORITY_INHERITANCE=0"
+)
+
+chromium_buildflag_header(
+    NAME
+        partition_alloc_buildflags
+    HEADER 
+        "partition_alloc_buildflags.h"
+
+    HEADER_DIR
+        "base"
+    FLAGS 
+        "USE_PARTITION_ALLOC=${USE_PARTITION_ALLOC}"
+)
+
+chromium_buildflag_header(
+    NAME 
+        sanitizer_buildflags
+    HEADER
+        "sanitizer_buildflags.h"
+    HEADER_DIR
+        "base"
+    FLAGS 
+        "IS_HWASAN=0"
+)
+
+chromium_buildflag_header(
+    NAME
+        "anchor_functions_buildflags"
+    HEADER
+        "anchor_functions_buildflags.h"
+    HEADER_DIR
+         "android/library_loader"  
+    FLAGS
+      "USE_LLD=0"
+      "SUPPORTS_CODE_ORDERING=0"
+)
+
+chromium_buildflag_header(
+    NAME
+        orderfile_buildflags
+    HEADER 
+        "orderfile_buildflags.h"
+    HEADER_DIR
+        "android/orderfile"    
+    FLAGS
+      "DEVTOOLS_INSTRUMENTATION_DUMPING=0"
+      "ORDERFILE_INSTRUMENTATION=0"
+)     
+
+chromium_buildflag_header(
+    NAME
+        base_win_buildflags
+    HEADER
+        "base_win_buildflags.h"
+    HEADER_DIR 
+        "win"
+    FLAGS
+      "SINGLE_MODULE_MODE_HANDLE_VERIFIER=1"
+)
+
+
+
+list(APPEND BASE_PUBLIC_DEFINES NO_TCMALLOC)
+if (DCHECK_ALWAYS_ON)
+	list(APPEND BASE_PUBLIC_DEFINES DCHECK_ALWAYS_ON)
+endif()
+
+list(APPEND BASE_PRIVATE_LIBRARIES chromium::allocator_buildflags)
+list(APPEND BASE_PRIVATE_LIBRARIES chromium::cfi_buildflags)
+list(APPEND BASE_PRIVATE_LIBRARIES chromium::debugging_buildflags)
+list(APPEND BASE_PRIVATE_LIBRARIES chromium::synchronization_buildflags)
+list(APPEND BASE_PRIVATE_LIBRARIES chromium::protected_memory_buildflags)
+list(APPEND BASE_PRIVATE_LIBRARIES chromium::partition_alloc_buildflags)
+list(APPEND BASE_PRIVATE_LIBRARIES chromium::base_win_buildflags)
+list(APPEND BASE_PRIVATE_LIBRARIES chromium::modp_b64)
+
+list(APPEND BASE_INCLUDES ${CMAKE_BINARY_DIR}) 
+
+if(IS_WIN)
+    list(APPEND BASE_PUBLIC_DEFINES
+        NOMINMAX
+        WIN32_LEAN_AND_MEAN
+    )
+    list(APPEND BASE_PUBLIC_LIBRARIES
+        "cfgmgr32.lib"
+        "powrprof.lib"
+        "propsys.lib"
+        "setupapi.lib"
+        "userenv.lib"
+        "winmm.lib"
+        "shell32.lib"
+        "dbghelp.lib"
+        "version.lib"
+        "shlwapi.lib"
+        "ws2_32.lib"
+        "wbemuuid.lib"
+    )
+    list(APPEND BASE_COPTS
+        "/Zi"
+    )
+    list(APPEND BASE_LINKOPTS
+        "/DEBUG"
+    )
+endif()
+
+if (IS_POSIX)
+    list(APPEND BASE_PUBLIC_LIBRARIES        
+
+        "dl"
+    )
+endif()
+
+if (IS_MAC)
+    list(APPEND BASE_PUBLIC_LIBRARIES
+        "-framework ApplicationServices"
+        "-framework AppKit"    
+        "-framework CoreFoundation"
+        "-framework Foundation"
+        "-framework IOKit"
+        "-framework Security"        
+    )
+    list(APPEND BASE_PUBLIC_LIBRARIES
+        "bsm"
+    )
+endif()
+
+if (IS_IOS)
+    list(APPEND BASE_PUBLIC_LIBRARIES
+        "-framework CoreGraphics"
+        "-framework CoreText"
+        "-framework Foundation"        
+        "-framework UIKit"
+    )
+    list(APPEND BASE_LINKOPTS
+        "-fobjc-link-runtime"
+    )
+endif()
+
+if (IS_LINUX)
+    add_subdirectory(third_party/xdg_mime)
+    add_subdirectory(third_party/xdg_user_dirs)
+    
+    list(APPEND BASE_PRIVATE_LIBRARIES "pthread")
+    list(APPEND BASE_PRIVATE_LIBRARIES "atomic")
+    list(APPEND BASE_PRIVATE_LIBRARIES chromium::xdg_mime)
+    list(APPEND BASE_PRIVATE_LIBRARIES chromium::xdg_user_dirs)
+endif()
+
+if(USE_LIBEVENT)
+    list(APPEND BASE_PRIVATE_LIBRARIES chromium::libevent)
+endif()
+
+if (IS_ANDROID)
+    add_subdirectory("third_party/cpufeatures")
+
+    list(APPEND BASE_PUBLIC_LIBRARIES "log")
+    list(APPEND BASE_PUBLIC_LIBRARIES "android")    
+    list(APPEND BASE_PRIVATE_LIBRARIES chromium::android_runtime_jni_headers)
+    list(APPEND BASE_PRIVATE_LIBRARIES chromium::base_jni_headers)
+    list(APPEND BASE_PRIVATE_LIBRARIES chromium::cpufeatures)
+    list(APPEND BASE_PRIVATE_LIBRARIES chromium::anchor_functions_buildflags)
+    list(APPEND BASE_PRIVATE_LIBRARIES chromium::orderfile_buildflags)
+    list(APPEND BASE_PRIVATE_LIBRARIES chromium::ashmem)
+endif()
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${BASE_SRCS})
+chromium_cc_library(
+    NAME
+        base
+    SRCS
+        ${BASE_SRCS}
+    PUBLIC_INCLUDES
+        ${BASE_INCLUDES}
+        ${CMAKE_SOURCE_DIR}
+    PUBLIC_DEFINES
+        ${BASE_PUBLIC_DEFINES}
+    COPTS
+        ${CHROMIUM_EXCEPTIONS_FLAG}
+        ${BASE_COPTS}          
+    LINKOPTS
+        ${BASE_LINKOPTS}
+    LIBRARIES        
+        ${BASE_PRIVATE_LIBRARIES}        
+    PUBLIC_LIBRARIES
+        ${BASE_PUBLIC_LIBRARIES}
+)
